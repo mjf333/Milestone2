@@ -1,0 +1,169 @@
+def dna_count(dna):
+    dna = dna.upper()
+    count_A = dna.count('A')
+    count_C = dna.count('C')
+    count_G = dna.count('G')
+    count_T = dna.count('T')
+    dict = {'A':count_A, 'C':count_C, 'G':count_G, 'T':count_T}
+    return dict
+
+def dna2rna(dna):
+    rna = dna.upper ()
+    rna = rna.replace("T","U")
+    return rna
+
+def reverse_complement(dna):
+    complement = ''
+    for symbol in dna:
+        if symbol == 'A':
+            complement = complement + 'T'
+        elif symbol == 'T':
+            complement = complement + 'A'
+        elif symbol == 'C':
+            complement = complement + 'G'
+        else:
+            complement = complement + 'C'
+        reverse = complement[::-1]
+    return reverse
+
+def mendels_law(hom, het, rec):
+    pop_total_1 = hom+het+rec
+    pop_total_2 = pop_total_1 - 1
+    het_p_1 = het/pop_total_1
+    rec_p_1 = rec/pop_total_1
+    het_p_2a = (het-1)/pop_total_2
+    het_p_2b = (het)/pop_total_2
+    rec_p_2a = (rec-1)/pop_total_2
+    rec_p_2b = (rec)/pop_total_2
+    return 1 - rec_p_1*rec_p_2a - rec_p_1*het_p_2b*0.5 - het_p_1*rec_p_2b*0.5 - het_p_1*het_p_2a*0.25
+
+def fibonacci_rabbits(n,k):
+    if n<2:
+        return n
+    else:
+        return fibonacci_rabbits(n-1,k) + fibonacci_rabbits(n-2,k)*k
+
+def GC_content(dna_list):
+    highest_percentage = 0
+    highest_index = 0
+    for i in range(len(dna_list)):
+        sum = 0
+        G = dna_list[i].count('G')
+        C = dna_list[i].count('C')
+        sum = C+G
+        if ((sum/len(dna_list[i]))*100)>highest_percentage:
+            highest_index = i
+            highest_percentage = sum/len(dna_list[i])*100
+    return [highest_index,highest_percentage]
+
+def rna2codon1(rna):
+    genetic_code = {
+        'UUU': 'F', 'UUC': 'F', 'UUA': 'L', 'UUG': 'L',        'CUU': 'L', 'CUC': 'L', 'CUA': 'L', 'CUG': 'L',
+        'AUU': 'I', 'AUC': 'I', 'AUA': 'I', 'AUG': 'M',        'GUU': 'V', 'GUC': 'V', 'GUA': 'V', 'GUG': 'V',
+
+        'UCU': 'S', 'UCC': 'S', 'UCA': 'S', 'UCG': 'S',        'CCU': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+        'ACU': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',        'GCU': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+
+        'UAU': 'Y', 'UAC': 'Y', 'UAA': '*', 'UAG': '*',        'CAU': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
+        'AAU': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',        'GAU': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
+
+        'UGU': 'C', 'UGC': 'C', 'UGA': '*', 'UGG': 'W',        'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+        'AGU': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',        'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',
+    }
+    protein = ""
+    if rna in genetic_code:
+        protein = genetic_code[str(rna)]
+    else:
+        protein = 'invalid'
+    return protein
+def rna2codon(rnas):
+    protein = ''
+    for i in range(0,int(len(rnas)/3)):
+        if rna2codon1(rnas[3*i:3*i+3]) == '*':
+            return protein
+        else:
+            protein = protein + rna2codon1(rnas[3*i:3*i+3])
+    return protein
+
+def locate_substring(dna_snippet,dna):
+    return [i for i in range(len(dna)) if dna.startswith(dna_snippet,i)]
+
+
+def hamming_dist(dna1,dna2):
+    index = 0
+    count = 0
+    while index < len(dna1):
+        if dna1[index] != dna2[index]:
+            count = count +1
+        index = index +1
+    return count
+
+prob = 0
+def count_dom_phenotype(genotypes):
+    for index in range(len(genotypes)):
+        if index == 0:
+            prob = genotypes[0]*2
+        if index == 1:
+            prob = prob + genotypes[1]*2
+        if index == 2:
+            prob = prob +genotypes[2]*2
+        if index == 3:
+            prob = prob + (genotypes[3]*2*0.75)
+        if index == 4:
+            prob = prob + genotypes[4]*2*0.5
+        if index == 5:
+            prob = prob + 0
+    return prob
+
+def source_rna(protein):
+    seq = protein + '*'
+    if '*' in protein:
+        seq = protein
+    codons = {'A':4,'R':6,'N':2,'D':2,
+          'C':2,'Q':2,'E':2,'G':4,
+          'H':2,'I':3,'L':6,'K':2,
+          'M':1,'F':2,'P':4,'S':6,
+          'T':4,'W':1,'Y':2,'V':4, '*':3}
+    total = 1
+    for x in seq:
+        total*=codons[x]
+    if len(protein.strip())>0:
+        return total%1000000
+    else:
+        return 0
+
+def splice_rna(dna, intron_list):
+    exons = dna
+    codons = ""
+    for i in range(0,len(intron_list)):
+        exons = exons.replace(intron_list[i],"")
+    rna = dna2rna(exons)
+    codons += rna2codon(rna)
+    return codons.replace('*','')
+def find_splice(dna_motif,dna):
+    beginning = 0
+    Splice_list = []
+    for char in dna_motif:
+        location = dna.find(char,beginning)
+        Splice_list.append(location)
+        beginning = location
+    return Splice_list
+def shared_motif(dna_list):
+    first=dna_list[0]
+    lengthOfFirst=len(first)
+    CommonSubStrings=[]
+    for i in range(lengthOfFirst):
+        for j in range(i+1,lengthOfFirst+1):
+            temp=first[i:j]
+            isAvailable=True
+            for k in range(1,len(dna_list)):
+                if temp not in dna_list[k]:
+                    isAvailable=False
+                    break
+            if isAvailable:
+                CommonSubStrings.append(temp)
+    result=""
+    for SubString in CommonSubStrings:
+        if len(SubString)>len(result):
+            result=SubString
+    return result

@@ -140,6 +140,7 @@ def splice_rna(dna, intron_list):
     rna = dna2rna(exons)
     codons += rna2codon(rna)
     return codons.replace('*','')
+
 def find_splice(dna_motif,dna):
     beginning = 0
     Splice_list = []
@@ -148,6 +149,7 @@ def find_splice(dna_motif,dna):
         Splice_list.append(location)
         beginning = location
     return Splice_list
+
 def shared_motif(dna_list):
     first=dna_list[0]
     lengthOfFirst=len(first)
@@ -167,3 +169,23 @@ def shared_motif(dna_list):
         if len(SubString)>len(result):
             result=SubString
     return result
+
+import math
+def random_genome (dna, gc_content):
+    dna = dna.upper()
+    GC = len(dna.replace('A','').replace('T',''))
+    AT = len(dna.replace('C','').replace('G',''))
+    final = []
+    for i in range (0,len(gc_content)):
+        chance = GC * math.log10(float(gc_content[i])/2) + AT * math.log10((1-float(gc_content[i]))/2)
+        final.append(round(chance,3))
+    return final
+
+def rev_palindrome(dna):
+    theanswer = []
+    for i in range(len(dna)-4):
+        for j in range(i+3,min(len(dna),i+12)):
+            temporarystring = dna[i:j+1]
+            if reverse_complement(dna[i:j+1]) == temporarystring:
+                theanswer.append((i,j-i+1))
+    return theanswer

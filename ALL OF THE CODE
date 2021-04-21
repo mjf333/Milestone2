@@ -188,4 +188,4 @@ def rev_palindrome(dna):
             temporarystring = dna[i:j+1]
             if reverse_complement(dna[i:j+1]) == temporarystring:
                 theanswer.append((i,j-i+1))
-    return theanswer
+    return theanswr

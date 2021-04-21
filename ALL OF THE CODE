@@ -218,15 +218,17 @@ def rev_palindrome(dna):
                 theanswer.append((i,j-i+1))
     return theanswer
     
-def get_edges(dict):
+def get_edgs(dict):
         adjacency = dict.keys()
         x =[]
+        y =[]
         for i in adjacency:
             x.append(i)
-        y =[]
         for i in range(0,len(x)):
             for j in range(i+1,len(x)):
-
-                if(dict[x[i]][:3]==dict[x[j]][-3:] or dict[x[i]][-3:]==dict[x[j]][:3]):
-                    y.append((x[i],x[j]))          
+                if dict[x[i]][:3]==dict[x[j]][-3:]:
+                    y.append((x[i],x[j]))
+            for j in range(i+1,len(x)):
+                if dict[x[i]][-3:]==dict[x[j]][:3]:
+                    y.append((x[i],x[j]))
         return y

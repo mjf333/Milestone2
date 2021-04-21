@@ -170,6 +170,8 @@ def shared_motif(dna_list):
             result=SubString
     return result
 
+    
+
 import math
 def random_genome (dna, gc_content):
     dna = dna.upper()

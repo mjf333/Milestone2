@@ -173,7 +173,7 @@ def shared_motif(dna_list):
 
 def assemble_genome(dna_list):
     t = len(dna_list)
-    overlap = [[0 for _ in range(t)] for _ in range(t)]
+    crossover = [[0 for _ in range(t)] for _ in range(t)]
     for a in range(t):
         for b in range(t):
             if a == b:
@@ -182,22 +182,21 @@ def assemble_genome(dna_list):
             size = len(x)
             for k in range(1, size):
                 if y.startswith(x[k:]):
-                    overlap[a][b] = size - k
+                    crossover[a][b] = size - k
                     break
 
-    def helper(a, mask):
+    def assistance(a, mask):
         if mask == (1<<t) - 1:
             return dna_list[a]
-        ans = '#' * 320
+        response = '#' * 320
         for b in range(t):
             if mask & (1<<b) == 0:
-                i = overlap[a][b]
-                string = helper(b, mask | (1<<b))
-                if len(dna_list[a] + string[i:]) < len(ans):
-                    ans = dna_list[a] + string[i:]
-        return ans
-    return min([helper(i, 1<<i) for i in range(t)], key=len)
-    
+                i = crossover[a][b]
+                string = assistance(b, mask | (1<<b))
+                if len(dna_list[a] + string[i:]) < len(response):
+                    response = dna_list[a] + string[i:]
+        return response
+    return min([assistance(i, 1<<i) for i in range(t)], key=len)
 
 import math
 def random_genome (dna, gc_content):

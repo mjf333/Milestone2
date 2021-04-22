@@ -198,6 +198,26 @@ def assemble_genome(dna_list):
         return response
     return min([assistance(i, 1<<i) for i in range(t)], key=len)
 
+
+def perfect_match(rna):
+    dictionary= {'A':0,'C':0,'G':0,'U':0}
+    for i in rna:
+        dictionary[i]+=1
+    if dictionary['A']==dictionary['U'] and dictionary['C']==dictionary['G']:
+        return fact(dictionary['A'])*fact(dictionary['C'])
+    else:
+        return "No matches found"
+
+def main():
+    rnaString = input("Enter RNA String : \n")
+    match = perfect_match(rnaString)
+    if type(match)==int:
+        print("Number of matches : ",match)
+    else:
+        print(match)
+if __name__=="__main__":
+    main()
+
 import math
 def random_genome (dna, gc_content):
     dna = dna.upper()
